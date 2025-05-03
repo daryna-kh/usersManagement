@@ -2,7 +2,7 @@ import axios from "axios";
 import { tokenService } from "../service/tokenService";
 
 const axiosInstance = axios.create({
-  baseURL: "/api",
+  baseURL: "",
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",

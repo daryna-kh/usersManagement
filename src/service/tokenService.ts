@@ -6,7 +6,20 @@ export class tokenService {
   }
 
   static get() {
-    return window.localStorage.getItem(tokenService.key);
+    const jwt = window.localStorage.getItem(tokenService.key);
+    if (jwt) {
+      const payload = jwt.split(".")[1];
+      const payloadJson = JSON.parse(atob(payload));
+      const expTimeUnix = payloadJson.exp;
+      const now = Date.now();
+
+      if (now > expTimeUnix) {
+        this.remove();
+        return null;
+      }
+      return jwt;
+    }
+    return jwt;
   }
 
   static remove() {

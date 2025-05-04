@@ -1,5 +1,5 @@
 export type authRequestParamsType = {
-  userName: string;
+  username: string;
   password: string;
 };
 

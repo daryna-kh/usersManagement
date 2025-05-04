@@ -10,7 +10,7 @@ export class tokenService {
     if (jwt) {
       const payload = jwt.split(".")[1];
       const payloadJson = JSON.parse(atob(payload));
-      const expTimeUnix = payloadJson.exp;
+      const expTimeUnix = payloadJson.exp * 1000;
       const now = Date.now();
 
       if (now > expTimeUnix) {

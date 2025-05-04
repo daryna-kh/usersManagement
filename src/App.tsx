@@ -13,11 +13,19 @@ function App() {
           },
         },
       },
+      MuiInputBase: {
+        styleOverrides: {
+          input: {
+            color: "#ffffff",
+          },
+        },
+      },
       MuiOutlinedInput: {
         styleOverrides: {
           root: {
             "& .MuiOutlinedInput-notchedOutline": {
               borderColor: "#ffffff",
+              color: "#ffffff",
             },
           },
         },
@@ -25,7 +33,7 @@ function App() {
       MuiInputLabel: {
         styleOverrides: {
           root: {
-            color: "#fffffF",
+            color: "#ffffff",
           },
         },
       },

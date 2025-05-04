@@ -2,19 +2,23 @@ import { Container, Box, TextField, Button, Typography } from "@mui/material";
 import { useFormik } from "formik";
 import { useAuth } from "./useAuth";
 import { useNavigate } from "react-router";
+import { fetchTokenAndAuth } from "../../store/features/auth/authThunks";
+import { useAppDispatch } from "../../store";
 
 export const Auth = () => {
+  const dispatch = useAppDispatch();
   const { validationSchema } = useAuth();
   const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
       email: "",
+      username: "",
       password: "",
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      console.log("Submitted:", values, validationSchema);
+      dispatch(fetchTokenAndAuth(values));
     },
   });
 
@@ -30,7 +34,7 @@ export const Auth = () => {
           noValidate
           sx={{ mt: 1 }}
         >
-          <TextField
+          {/* <TextField
             margin="normal"
             required
             fullWidth
@@ -44,6 +48,21 @@ export const Auth = () => {
             onBlur={formik.handleBlur}
             error={Boolean(formik.touched.email && formik.errors.email)}
             helperText={formik.touched.email && formik.errors.email}
+          /> */}
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="username"
+            label="User Name"
+            name="username"
+            autoComplete="username"
+            autoFocus
+            value={formik.values.username}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={Boolean(formik.touched.username && formik.errors.username)}
+            helperText={formik.touched.username && formik.errors.username}
           />
           <TextField
             margin="normal"

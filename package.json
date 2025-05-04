@@ -3,7 +3,6 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "proxy": "https://dummyjson.com",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

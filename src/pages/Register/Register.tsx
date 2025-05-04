@@ -1,9 +1,14 @@
 import { Container, Box, TextField, Button, Typography } from "@mui/material";
 import { useFormik } from "formik";
 import { useRegister } from "./useRegister";
+import { registerParamsType } from "../../api/fetchNewUser/types";
+import { fetchNewUser } from "../../api/fetchNewUser/fetchNewUser";
 
 export const Register = () => {
   const { validationSchema } = useRegister();
+  const addNewUser = async (values: registerParamsType) => {
+    fetchNewUser(values);
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -15,7 +20,7 @@ export const Register = () => {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      console.log("Submitted:", values, validationSchema);
+      addNewUser(values);
     },
   });
 

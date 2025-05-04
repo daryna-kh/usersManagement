@@ -9,10 +9,6 @@ export const useRegister = () => {
   > = Yup.string()
     .min(1, "Field cant be empty")
     .max(50, "Too long")
-    .matches(
-      /^[p{L}'\-\s]+$/,
-      "The field can contain only letters, space, hyphen and apostrophe"
-    )
     .required("Required");
 
   const validationSchema = Yup.object({

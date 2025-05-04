@@ -1,12 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { getTokenAndAuth } from "../../../api/getTokenAndAuth/getTokenAndAuth";
+import { authRequestParamsType } from "../../../api/getTokenAndAuth/types";
 
-export const fetchUserById = createAsyncThunk(
-  "auth/fetchById",
-  async (userName, thunkAPI) => {
+export const fetchTokenAndAuth = createAsyncThunk(
+  "auth/",
+  async (params: authRequestParamsType, thunkAPI) => {
     try {
-      const user = await getTokenAndAuth();
-      return user;
+      const user = await getTokenAndAuth(params);
+      return user.accessToken;
     } catch (err) {
       return thunkAPI.rejectWithValue(err);
     }

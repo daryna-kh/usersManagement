@@ -1,6 +1,25 @@
 import { Container, Box, TextField, Button, Typography } from "@mui/material";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 export const RecoveryPassword = () => {
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+    },
+    validationSchema: Yup.object({
+      email: Yup.string()
+        .required("Required")
+        .max(30, "Too Long!")
+        .matches(
+          /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
+          "Invalid email format"
+        ),
+    }),
+    onSubmit: (values) => {
+      console.log("Submitted:", values);
+    },
+  });
   return (
     <Container maxWidth="xs">
       <Box display="flex" flexDirection="column" alignItems="center" mt={8}>
@@ -21,6 +40,11 @@ export const RecoveryPassword = () => {
             name="email"
             autoComplete="email"
             autoFocus
+            value={formik.values.email}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={Boolean(formik.touched.email && formik.errors.email)}
+            helperText={formik.touched.email && formik.errors.email}
           />
           <Button
             type="submit"

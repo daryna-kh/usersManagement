@@ -1,13 +1,25 @@
 import { Container, Box, TextField, Button, Typography } from "@mui/material";
 import { useFormik } from "formik";
 import { useRegister } from "./useRegister";
-import { registerParamsType } from "../../api/fetchNewUser/types";
-import { fetchNewUser } from "../../api/fetchNewUser/fetchNewUser";
+import { registerParamsType } from "../../api/user/types";
+import { useNavigate } from "react-router";
+import { fetchRegister } from "../../api/user/fetchRegister";
+import { useState } from "react";
 
 export const Register = () => {
   const { validationSchema } = useRegister();
+  const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const addNewUser = async (values: registerParamsType) => {
-    fetchNewUser(values);
+    const registerData = await fetchRegister(values);
+    const success = registerData.success;
+    if (success) {
+      navigate("/auth");
+    } else {
+      // TODO: Show register errors under the form
+      console.log(registerData.error);
+      setErrorMessage(registerData.error);
+    }
   };
 
   const formik = useFormik({
@@ -19,8 +31,8 @@ export const Register = () => {
       confirmPassword: "",
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      addNewUser(values);
+    onSubmit: ({ confirmPassword, ...userData }) => {
+      addNewUser(userData);
     },
   });
 
@@ -125,7 +137,19 @@ export const Register = () => {
           >
             Create Account
           </Button>
+          {errorMessage && <p>{errorMessage}</p>}
         </Box>
+        <span style={{ fontSize: 14 }}>Already have an account?</span>
+        <Button
+          fullWidth
+          variant="outlined"
+          sx={{ mt: 3, mb: 2 }}
+          onClick={() => {
+            navigate("/auth");
+          }}
+        >
+          Sign In
+        </Button>
       </Box>
     </Container>
   );

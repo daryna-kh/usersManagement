@@ -2,7 +2,7 @@ export class tokenService {
   private static readonly key = "security_token";
 
   static create(value: string) {
-    window.localStorage.setItem(tokenService.key, value);
+    if (value) window.localStorage.setItem(tokenService.key, value);
   }
 
   static get() {

@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import bcrypt from 'bcrypt';
 import {
   createUser,
   getAllUsers,
@@ -7,6 +8,16 @@ import {
   updateUser,
   deactivateUser,
 } from '../models/userModel';
+
+async function hashPassword(password: string) {
+  try {
+    const hash = await bcrypt.hash(password, 10);
+    return hash;
+  } catch (err) {
+    console.error('Hash error:', err);
+    return null;
+  }
+}
 
 export const createUserController = async (req: Request, res: Response) => {
   const { firstName, lastName, email, password } = req.body;
@@ -31,7 +42,16 @@ export const createUserController = async (req: Request, res: Response) => {
       return;
     }
 
-    const user = await createUser({ firstName, lastName, email, password });
+    const hashedPassword = await hashPassword(password);
+
+    if (!hashedPassword) return;
+
+    const user = await createUser({
+      firstName,
+      lastName,
+      email,
+      hashedPassword,
+    });
     const { password: _, ...safeUser } = user;
     res.status(201).json(safeUser);
   } catch (error: any) {

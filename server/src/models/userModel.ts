@@ -6,7 +6,7 @@ export interface CreateUserInput {
   firstName: string;
   lastName: string;
   email: string;
-  password: string;
+  hashedPassword: string;
 }
 
 export interface UpdateUserInput {
@@ -18,7 +18,14 @@ export interface UpdateUserInput {
 }
 
 export const createUser = (data: CreateUserInput): Promise<User> => {
-  return prisma.user.create({ data });
+  return prisma.user.create({
+    data: {
+      firstName: data.firstName,
+      lastName: data.lastName,
+      email: data.email,
+      password: data.hashedPassword,
+    },
+  });
 };
 
 export const getUserById = (id: number): Promise<User | null> => {

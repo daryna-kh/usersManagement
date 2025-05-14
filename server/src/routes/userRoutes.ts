@@ -9,7 +9,6 @@ import {
 
 const userRoutes = Router();
 
-userRoutes.post('/', createUserController);
 userRoutes.get('/', getAllUsersController);
 userRoutes.get('/:id', getUserByIdController);
 userRoutes.put('/:id', updateUserController);

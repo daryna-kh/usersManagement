@@ -3,19 +3,20 @@ import jwt from 'jsonwebtoken';
 import config from '../config/config';
 import bcrypt from 'bcrypt';
 
-interface LoginType {
+export interface LoginRequestType {
   email: string;
   password: string;
+}
+export interface AuthResponseType {
+  token: string;
+  user: { id: number; email: string };
 }
 const prisma = new PrismaClient();
 
 export const login = async ({
   email,
   password,
-}: LoginType): Promise<{
-  token: string;
-  user: { id: number; email: string };
-}> => {
+}: LoginRequestType): Promise<AuthResponseType> => {
   console.log(email, password);
   const user = await prisma.user.findUnique({
     where: { email },

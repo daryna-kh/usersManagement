@@ -21,7 +21,7 @@ export const fetchRegister = async (
 
   try {
     const response = await axios.post(
-      "/auth/register",
+      "/api/auth/register",
       { firstName, lastName, email, password },
       { headers: { "Content-Type": "application/json" } }
     );

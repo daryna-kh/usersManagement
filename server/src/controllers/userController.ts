@@ -8,6 +8,7 @@ import {
   updateUser,
   deactivateUser,
 } from '../models/userModel';
+import { login } from '../models/authModel';
 
 async function hashPassword(password: string) {
   try {
@@ -52,8 +53,16 @@ export const createUserController = async (req: Request, res: Response) => {
       email,
       hashedPassword,
     });
-    const { password: _, ...safeUser } = user;
-    res.status(201).json(safeUser);
+
+    // const { password: _, ...safeUser } = user;
+    // res.status(201).json(safeUser);
+
+    const { token, user: loggedInUser } = await login({ email, password });
+
+    res.status(201).json({
+      token,
+      user: loggedInUser,
+    });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }

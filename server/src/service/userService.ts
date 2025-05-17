@@ -1,21 +1,7 @@
 import { PrismaClient, User } from '@prisma/client';
+import { CreateUserInput, UpdateUserInput } from './types';
 
 const prisma = new PrismaClient();
-
-export interface CreateUserInput {
-  firstName: string;
-  lastName: string;
-  email: string;
-  hashedPassword: string;
-}
-
-export interface UpdateUserInput {
-  firstName?: string;
-  lastName?: string;
-  email?: string;
-  password?: string;
-  id: number;
-}
 
 export const createUser = (data: CreateUserInput): Promise<User> => {
   return prisma.user.create({
@@ -49,23 +35,25 @@ export const getAllUsers = (): Promise<
       firstName: true,
       lastName: true,
       isActive: true,
+      createdAt: true,
+      updatedAt: true,
     },
   });
 };
 
 export const updateUser = (
-  id: string,
+  id: number,
   data: UpdateUserInput,
 ): Promise<User> => {
   return prisma.user.update({
-    where: { id: Number(id) },
+    where: { id: id },
     data,
   });
 };
 
-export const deactivateUser = (id: string): Promise<User> => {
+export const deactivateUser = (id: number): Promise<User> => {
   return prisma.user.update({
-    where: { id: Number(id) },
+    where: { id: id },
     data: { isActive: false },
   });
 };

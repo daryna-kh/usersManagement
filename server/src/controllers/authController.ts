@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { login } from '../models/authModel';
+import { login } from '../service/authServices';
 
 interface LoginType {
   email: string;

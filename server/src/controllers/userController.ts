@@ -2,13 +2,14 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import {
   createUser,
-  getAllUsers,
-  getUserById,
-  getUserByEmail,
-  updateUser,
   deactivateUser,
-} from '../models/userModel';
-import { login } from '../models/authModel';
+  getAllUsers,
+  getUserByEmail,
+  getUserById,
+  updateUser,
+} from '../service/userService';
+import { login } from '../service/authServices';
+import { parseAndValidateId } from '../utils/parseAndValidateId';
 
 async function hashPassword(password: string) {
   try {
@@ -54,9 +55,6 @@ export const createUserController = async (req: Request, res: Response) => {
       hashedPassword,
     });
 
-    // const { password: _, ...safeUser } = user;
-    // res.status(201).json(safeUser);
-
     const { token, user: loggedInUser } = await login({ email, password });
 
     res.status(201).json({
@@ -78,17 +76,11 @@ export const getAllUsersController = async (req: Request, res: Response) => {
 };
 
 export const getUserByIdController = async (req: Request, res: Response) => {
-  const userIdNumber = Number(req.params.id);
-
-  if (Number.isNaN(userIdNumber)) {
-    res.status(400).json({
-      error: 'ID must contain only numbers',
-    });
-    return;
-  }
+  const userId = parseAndValidateId(req.params.id, res);
+  if (userId === null) return;
 
   try {
-    const user = await getUserById(userIdNumber);
+    const user = await getUserById(userId);
     if (!user || !user.isActive) {
       res.status(404).json({ error: 'User not found' });
       return;
@@ -102,8 +94,11 @@ export const getUserByIdController = async (req: Request, res: Response) => {
 };
 
 export const updateUserController = async (req: Request, res: Response) => {
+  const userId = parseAndValidateId(req.params.id, res);
+  if (userId === null) return;
+
   try {
-    const updated = await updateUser(req.params.id, req.body);
+    const updated = await updateUser(userId, req.body);
     const { password, ...safeUser } = updated;
     res.json(safeUser);
   } catch (error: any) {
@@ -112,8 +107,11 @@ export const updateUserController = async (req: Request, res: Response) => {
 };
 
 export const deactivateUserController = async (req: Request, res: Response) => {
+  const userId = parseAndValidateId(req.params.id, res);
+  if (userId === null) return;
+
   try {
-    const deleted = await deactivateUser(req.params.id);
+    const deleted = await deactivateUser(userId);
     const { password, ...safeUser } = deleted;
     res.json({ message: 'User deactivated', user: safeUser });
   } catch (error: any) {

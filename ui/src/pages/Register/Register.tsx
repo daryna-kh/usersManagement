@@ -16,8 +16,6 @@ export const Register = () => {
     if (success) {
       navigate("/auth");
     } else {
-      // TODO: Show register errors under the form
-      console.log(registerData.error);
       setErrorMessage(registerData.error);
     }
   };

@@ -1,16 +1,15 @@
 import { post } from "../axiosInstance";
 import { authRequestParamsType, UserType } from "./types";
 
-export const getTokenAndAuth = async (
+export const fetchAuth = async (
   params: authRequestParamsType
 ): Promise<UserType> => {
-  const { username, password } = params;
+  const { email, password } = params;
   const body = JSON.stringify({
-    username: username,
+    email: email,
     password: password,
-    expiresInMins: 30,
   });
 
-  const responce = await post("/auth/login", body);
+  const responce = await post("/auth", body);
   return responce.data;
 };

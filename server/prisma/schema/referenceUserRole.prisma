@@ -1,0 +1,7 @@
+model ReferenceUserRole {
+  id               Int     @id @default(autoincrement())
+  role             String  @unique
+  roleName         String
+  roleDescription  String
+  userRoles UserRole[]
+}
